@@ -6,17 +6,36 @@ public class SingleLinkedList {
     public static void main(String[] args) {
         SingleLinkedList singleLinkedList = new SingleLinkedList();
         singleLinkedList.add(new HeroNode(1, "hi", "hi2"));
-        singleLinkedList.add(new HeroNode(2, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(3, "Max", "M"));
+        singleLinkedList.add(new HeroNode(2, "Terry", "Tr"));
+        singleLinkedList.add(new HeroNode(7, "Terry", "Tr"));
+        singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
+        singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
+        singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
         singleLinkedList.print();
     }
 
     public void add(HeroNode node) {
         HeroNode temp = head;
-        while (temp.next != null) {
+
+        while (true) {
+            if (temp.next == null) {
+                temp.next = node;
+                break;
+            }
+
+            if (temp.next.no > node.no) {
+                node.next = temp.next;
+                temp.next = node;
+                break;
+            }
+
+            if (temp.next.no == node.no) {
+                throw new RuntimeException("加入了已存在的編號: " + node.no);
+            }
+
             temp = temp.next;
         }
-        temp.next = node;
     }
 
     public void print() {
