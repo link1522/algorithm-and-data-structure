@@ -10,8 +10,8 @@ public class SingleLinkedList {
         singleLinkedList.add(new HeroNode(2, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(7, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
-        singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
+        singleLinkedList.update(new HeroNode(5, "Book", "BB"));
         singleLinkedList.print();
     }
 
@@ -38,8 +38,42 @@ public class SingleLinkedList {
         }
     }
 
+    public void update(HeroNode node) {
+        if (isEmpty()) {
+            System.out.println("鏈表為空");
+            return;
+        }
+
+        HeroNode temp = head.next;
+        boolean foundNo = false;
+
+        while (true) {
+            if (temp == null) {
+                break;
+            }
+
+            if (temp.no == node.no) {
+                foundNo = true;
+                break;
+            }
+
+            temp = temp.next;
+        }
+
+        if (foundNo) {
+            temp.name = node.name;
+            temp.nickname = node.nickname;
+        } else {
+            System.out.printf("沒有找到 %d 節點，不能修改\n", node.no);
+        }
+    }
+
+    public boolean isEmpty() {
+        return head.next == null;
+    }
+
     public void print() {
-        if (head.next == null) {
+        if (isEmpty()) {
             System.out.println("鏈表為空");
         }
 
