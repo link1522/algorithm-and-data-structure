@@ -12,6 +12,7 @@ public class SingleLinkedList {
         singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
         singleLinkedList.update(new HeroNode(5, "Book", "BB"));
+        singleLinkedList.delete(7);
         singleLinkedList.print();
     }
 
@@ -65,6 +66,28 @@ public class SingleLinkedList {
             temp.nickname = node.nickname;
         } else {
             System.out.printf("沒有找到 %d 節點，不能修改\n", node.no);
+        }
+    }
+
+    public void delete(int no) {
+        if (isEmpty()) {
+            System.out.println("鏈表為空");
+            return;
+        }
+
+        HeroNode temp = head;
+
+        while (true) {
+            if (temp.next == null) {
+                break;
+            }
+
+            if (temp.next.no == no) {
+                temp.next = temp.next.next;
+                break;
+            }
+
+            temp = temp.next;
         }
     }
 
