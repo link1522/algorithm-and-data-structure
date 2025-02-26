@@ -12,8 +12,29 @@ public class SingleLinkedList {
         singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
         singleLinkedList.update(new HeroNode(5, "Book", "BB"));
-        singleLinkedList.delete(7);
-        singleLinkedList.print();
+        HeroNode node = singleLinkedList.getFromBack(3);
+        System.out.println(node);
+    }
+
+    public HeroNode getFromBack(int count) {
+        HeroNode temp = head.next;
+
+        int size = 0;
+        while (temp != null) {
+            size++;
+            temp = temp.next;
+        }
+
+        if (size - count < 0) {
+            throw new RuntimeException("超出鏈表長度");
+        }
+
+        temp = head.next;
+        for (int i = 0; i < (size - count); i++) {
+            temp = temp.next;
+        }
+
+        return temp;
     }
 
     public void add(HeroNode node) {
