@@ -12,8 +12,31 @@ public class SingleLinkedList {
         singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
         singleLinkedList.update(new HeroNode(5, "Book", "BB"));
-        HeroNode node = singleLinkedList.getFromBack(3);
-        System.out.println(node);
+        singleLinkedList.reverse();
+        singleLinkedList.print();
+    }
+
+    public void reverse() {
+        // 空的或者只有一個元素就不用處理
+        if (head.next == null || head.next.next == null) {
+            return;
+        }
+
+        // 創建一個反向的 head
+        HeroNode reversedHead = new HeroNode(0, null, null);
+
+        HeroNode cur = head.next;
+        while (cur != null) {
+            // 將原鏈表先跳過當前元素
+            head.next = cur.next;
+            // 當前元素的 next 指向反向 head 的 next
+            cur.next = reversedHead.next;
+            // 反向 head 的 next 在指向當前元素，相當於直接放在最前方
+            reversedHead.next = cur;
+            // 當前元素改為 head 的 next
+            cur = head.next;
+        }
+        head.next = reversedHead.next;
     }
 
     public HeroNode getFromBack(int count) {
