@@ -11,7 +11,7 @@ public class DoublyLinkedList {
         doublyLinkedList.add(new HeroNode2(7, "Terry", "Tr"));
         doublyLinkedList.add(new HeroNode2(5, "Terry", "Tr"));
         doublyLinkedList.add(new HeroNode2(6, "Terry", "Tr"));
-        doublyLinkedList.update(new HeroNode2(5, "Five", "FF"));
+        doublyLinkedList.delete(6);
         doublyLinkedList.print();
     }
 
@@ -72,6 +72,32 @@ public class DoublyLinkedList {
             cur = cur.next;
         }
         System.out.println(cur);
+    }
+
+    public void delete(int no) {
+        HeroNode2 temp = head.next;
+        Boolean found = false;
+
+        while (true) {
+            if (temp == null) {
+                break;
+            }
+
+            if (temp.no == no) {
+                found = true;
+                break;
+            }
+
+            temp = temp.next;
+        }
+
+        if (found) {
+            temp.pre.next = temp.next;
+            // 如果不是刪除最後一個元素，就要對下一個元素的 pre 進行修改
+            if (temp.next != null) {
+                temp.next.pre = temp.pre;
+            }
+        }
     }
 
 }
