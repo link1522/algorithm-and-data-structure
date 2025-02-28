@@ -1,5 +1,7 @@
 package LinkedList;
 
+import java.util.Stack;
+
 public class SingleLinkedList {
     private HeroNode head = new HeroNode(0, "", "");
 
@@ -12,8 +14,7 @@ public class SingleLinkedList {
         singleLinkedList.add(new HeroNode(5, "Terry", "Tr"));
         singleLinkedList.add(new HeroNode(6, "Terry", "Tr"));
         singleLinkedList.update(new HeroNode(5, "Book", "BB"));
-        singleLinkedList.reverse();
-        singleLinkedList.print();
+        singleLinkedList.reversePrint();
     }
 
     public void reverse() {
@@ -150,6 +151,21 @@ public class SingleLinkedList {
             temp = temp.next;
         }
         System.out.println(temp);
+    }
+
+    // 不影響原鏈表
+    public void reversePrint() {
+        Stack<HeroNode> stack = new Stack<HeroNode>();
+
+        HeroNode cur = head.next;
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
     }
 }
 
