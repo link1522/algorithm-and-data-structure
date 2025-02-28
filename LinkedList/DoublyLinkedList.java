@@ -15,20 +15,26 @@ public class DoublyLinkedList {
         doublyLinkedList.print();
     }
 
-    // 先考慮加到最後
     public void add(HeroNode2 node) {
         HeroNode2 cur = head;
 
         while (true) {
             if (cur.next == null) {
+                cur.next = node;
+                node.pre = cur;
+                break;
+            }
+
+            if (cur.no < node.no && node.no < cur.next.no) {
+                node.next = cur.next;
+                node.pre = cur;
+                node.pre.next = node;
+                node.next.pre = node;
                 break;
             }
 
             cur = cur.next;
         }
-
-        cur.next = node;
-        node.pre = cur;
     }
 
     public void update(HeroNode2 node) {
