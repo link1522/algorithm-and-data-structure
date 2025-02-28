@@ -11,6 +11,7 @@ public class DoublyLinkedList {
         doublyLinkedList.add(new HeroNode2(7, "Terry", "Tr"));
         doublyLinkedList.add(new HeroNode2(5, "Terry", "Tr"));
         doublyLinkedList.add(new HeroNode2(6, "Terry", "Tr"));
+        doublyLinkedList.update(new HeroNode2(5, "Five", "FF"));
         doublyLinkedList.print();
     }
 
@@ -28,6 +29,32 @@ public class DoublyLinkedList {
 
         cur.next = node;
         node.pre = cur;
+    }
+
+    public void update(HeroNode2 node) {
+        HeroNode2 cur = head.next;
+
+        Boolean found = false;
+
+        while (true) {
+            if (cur == null) {
+                break;
+            }
+
+            if (cur.no == node.no) {
+                found = true;
+                break;
+            }
+
+            cur = cur.next;
+        }
+
+        if (found) {
+            cur.name = node.name;
+            cur.nickname = node.nickname;
+        } else {
+            throw new RuntimeException("找不到更新元素");
+        }
     }
 
     public boolean isEmpty() {
