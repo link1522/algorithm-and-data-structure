@@ -62,6 +62,10 @@ public class ArrayStack {
         return value;
     }
 
+    public int peek() {
+        return stack[top];
+    }
+
     public void print() {
         for (int i = 0; i < maxSize - size(); i++) {
             System.out.println("| |");
