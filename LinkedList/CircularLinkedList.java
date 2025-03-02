@@ -4,8 +4,8 @@ public class CircularLinkedList {
     public static void main(String[] args) {
         CircularLinkedList circularLinkedList = new CircularLinkedList();
 
-        circularLinkedList.addBoy(1);
-        circularLinkedList.print();
+        circularLinkedList.addBoy(5);
+        circularLinkedList.countBoy(1, 2, 5);
     }
 
     private Boy first = null;
@@ -44,6 +44,50 @@ public class CircularLinkedList {
             curBoy = curBoy.getNext();
         } while (curBoy != first);
     }
+
+    /**
+     * 約瑟夫問題 Josephus problem
+     * 
+     * @param startNo  表示從哪個小孩開始
+     * @param countNum 表示數幾下
+     * @param nums     表示幾個小孩圍成一圈
+     */
+    public void countBoy(int startNo, int countNum, int nums) {
+        if (first == null || startNo < 1 || startNo > nums) {
+            System.out.println("參數輸入有問題");
+            return;
+        }
+
+        // 先將 helper 移動到最後一個元素
+        Boy helper = first;
+        do {
+            helper = helper.getNext();
+        } while (helper.getNext() != first);
+
+        // 根據 startNo 進行偏移
+        for (int i = 0; i < startNo - 1; i++) {
+            first = first.getNext();
+            helper = helper.getNext();
+        }
+
+        // 開始數
+        while (true) {
+            if (helper == first) {
+                break;
+            }
+
+            for (int i = 0; i < countNum - 1; i++) {
+                first = first.getNext();
+                helper = helper.getNext();
+            }
+
+            System.out.println(first);
+            first = first.getNext();
+            helper.setNext(first);
+        }
+
+        System.out.println("最後留在圈中的: " + first);
+    }
 }
 
 class Boy {
@@ -72,6 +116,6 @@ class Boy {
 
     @Override
     public String toString() {
-        return "Boy {\n  no = " + no + "\n}";
+        return "Boy { no = " + no + "}";
     }
 }
