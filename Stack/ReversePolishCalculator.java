@@ -6,12 +6,50 @@ import java.util.Stack;
 
 public class ReversePolishCalculator {
     public static void main(String[] args) {
-        String suffixExpression = "3 4 + 5 * 6 - ";
-        List<String> rpn = getListString(suffixExpression);
-        int result = calculate(rpn);
-        System.out.println(result);
+        String expression = "1+((2+3)*4)-5";
+        var ls = strToList(expression);
+        System.out.println(ls);
+
+        // String suffixExpression = "3 4 + 5 * 6 - ";
+        // List<String> rpn = getListString(suffixExpression);
+        // int result = calculate(rpn);
+        // System.out.println(result);
     }
 
+    /**
+     * 處理用空格區分的 String to list
+     */
+    public static List<String> strToList(String expression) {
+        List<String> ls = new ArrayList<String>();
+        int i = 0;
+        String str; // 用來拼接多位數
+        char c;
+
+        do {
+            c = expression.charAt(i);
+            if (c < 48 || c > 57) {
+                ls.add("" + c);
+                i++;
+            } else {
+                str = "";
+                while(c >= 48 && c <= 57) {
+                    str += c;
+                    i++;
+                    if (i >= expression.length()) {
+                        break;
+                    }
+                    c = expression.charAt(i);
+                }
+                ls.add(str);
+            }
+        } while(i < expression.length());
+
+        return ls;
+    }
+
+    /**
+     * 處理用空格區分的 String to list
+     */
     public static List<String> getListString(String suffixExpression) {
         String[] split = suffixExpression.split(" ");
         List<String> list = new ArrayList<String>();
