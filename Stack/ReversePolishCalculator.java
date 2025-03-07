@@ -8,17 +8,42 @@ public class ReversePolishCalculator {
     public static void main(String[] args) {
         String expression = "1+((2+3)*4)-5";
         var ls = strToList(expression);
-        System.out.println(ls);
-
-        // String suffixExpression = "3 4 + 5 * 6 - ";
-        // List<String> rpn = getListString(suffixExpression);
-        // int result = calculate(rpn);
-        // System.out.println(result);
+        var rpn = toRPNList(ls);
+        int result = calculate(rpn);
+        System.out.println(result);
     }
 
-    /**
-     * 處理用空格區分的 String to list
-     */
+    public static List<String> toRPNList(List<String> ls) {
+        var operatorStack = new Stack<String>();
+        var result = new ArrayList<String>();
+
+        for (var item : ls) {
+            if (item.matches("\\d+")) {
+                result.add(item);
+            } else if (item.equals("(")) {
+                operatorStack.push(item);
+            } else if (item.equals(")")) {
+                while (!operatorStack.peek().equals("(")) {
+                    result.add(operatorStack.pop());
+                }
+                operatorStack.pop(); // 彈出左括號 (
+            } else {
+                while (operatorStack.size() != 0
+                        && Operator.getPriority(operatorStack.peek()) >= Operator.getPriority(item)) {
+                    result.add(operatorStack.pop());
+                }
+                operatorStack.push(item);
+            }
+
+        }
+
+        while (operatorStack.size() != 0) {
+            result.add(operatorStack.pop());
+        }
+
+        return result;
+    }
+
     public static List<String> strToList(String expression) {
         List<String> ls = new ArrayList<String>();
         int i = 0;
@@ -32,7 +57,7 @@ public class ReversePolishCalculator {
                 i++;
             } else {
                 str = "";
-                while(c >= 48 && c <= 57) {
+                while (c >= 48 && c <= 57) {
                     str += c;
                     i++;
                     if (i >= expression.length()) {
@@ -42,21 +67,9 @@ public class ReversePolishCalculator {
                 }
                 ls.add(str);
             }
-        } while(i < expression.length());
+        } while (i < expression.length());
 
         return ls;
-    }
-
-    /**
-     * 處理用空格區分的 String to list
-     */
-    public static List<String> getListString(String suffixExpression) {
-        String[] split = suffixExpression.split(" ");
-        List<String> list = new ArrayList<String>();
-        for (String element : split) {
-            list.add(element);
-        }
-        return list;
     }
 
     public static int calculate(List<String> ls) {
@@ -77,6 +90,7 @@ public class ReversePolishCalculator {
                         res = num1 - num2;
                         break;
                     case "*":
+                    case "x":
                         res = num1 * num2;
                         break;
                     case "/":
@@ -90,5 +104,30 @@ public class ReversePolishCalculator {
         }
 
         return Integer.parseInt(stack.pop());
+    }
+}
+
+class Operator {
+    private static int ADD = 1;
+    private static int SUB = 1;
+    private static int MUL = 2;
+    private static int DIV = 2;
+
+    public static int getPriority(String operator) {
+        switch (operator) {
+            case "+":
+                return ADD;
+            case "-":
+                return SUB;
+            case "x":
+            case "*":
+                return MUL;
+            case "/":
+                return DIV;
+            case "(":
+                return 0;
+        }
+
+        throw new IllegalArgumentException("未知的計算符號 \"" + operator + "\"");
     }
 }
