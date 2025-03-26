@@ -9,6 +9,9 @@ public class SelectionSort {
         System.out.println(Arrays.toString(arr));
     }
 
+    /*
+     * 時間複雜度 O(n^2)
+     */
     public static void sort(int[] arr) {
         int min;
         int temp;
