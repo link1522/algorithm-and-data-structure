@@ -15,30 +15,23 @@ public class RadixSort {
         // 紀錄每個桶存放幾個有效數據
         int[] bucketElementCount = new int[10];
 
-        // 最大位數
-        int maxDigitalCount = 1;
-        int divider = 10;
-        int count = 1;
-        // 計算最大位數
-        for (int i = 0; i < arr.length; i++) {
-            while (arr[i] / divider != 0) {
-                count++;
-                divider *= 10;
-            }
-
-            if (count > maxDigitalCount) {
-                maxDigitalCount = count;
+        // 找最大值
+        int max = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > max) {
+                max = arr[i];
             }
         }
 
+        // 位數長度
+        int digitalLength = Integer.toString(max).length();
+
         int digital; // 位數 (從個、十、百 ... 位)
         int arrIndex; // 原陣列索引，用來將桶中的元素放回
-        for (int i = 0; i < maxDigitalCount; i++) {
-            divider = (int) Math.pow(10, i);
-
+        for (int i = 0, n = 1; i < digitalLength; i++, n *= 10) {
             // 依序放入桶中
             for (int j = 0; j < arr.length; j++) {
-                digital = arr[j] / divider % 10;
+                digital = arr[j] / n % 10;
                 bucket[digital][bucketElementCount[digital]] = arr[j];
                 bucketElementCount[digital]++;
             }
