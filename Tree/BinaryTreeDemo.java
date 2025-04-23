@@ -24,9 +24,19 @@ public class BinaryTreeDemo {
         node3.setLeft(node6);
         node3.setRight(node7);
         binaryTree.setRoot(node1);
-        binaryTree.preOrder();
+
+        // binaryTree.preOrder();
         // binaryTree.infixOrder();
         // binaryTree.postOrder();
+
+        // Node n = binaryTree.preOrderSearch(7);
+        // Node n = binaryTree.infixOrderSearch(7);
+        Node n = binaryTree.postOrderSearch(7);
+        if (n == null) {
+            System.out.println("找不到");
+        } else {
+            System.out.println(n);
+        }
     }
 }
 
@@ -53,6 +63,24 @@ class BinaryTree {
         if (root == null)
             return;
         root.postOrder();
+    }
+
+    public Node preOrderSearch(int id) {
+        if (root == null)
+            return null;
+        return root.preOrderSearch(id);
+    }
+
+    public Node infixOrderSearch(int id) {
+        if (root == null)
+            return null;
+        return root.infixOrderSearch(id);
+    }
+
+    public Node postOrderSearch(int id) {
+        if (root == null)
+            return null;
+        return root.postOrderSearch(id);
     }
 }
 
@@ -104,6 +132,10 @@ class Node {
         return "Node {\n  id = " + id + ",\n  name = " + name + "\n}";
     }
 
+    /*
+     * 遍歷
+     */
+
     // 前序遍歷
     public void preOrder() {
         System.out.println(this);
@@ -140,5 +172,74 @@ class Node {
         }
 
         System.out.println(this);
+    }
+
+    /*
+     * 查找
+     */
+    public Node preOrderSearch(int id) {
+        if (this.id == id) {
+            return this;
+        }
+
+        Node result = null;
+
+        if (this.left != null) {
+            result = this.left.preOrderSearch(id);
+        }
+        if (result != null) {
+            return result;
+        }
+
+        if (this.right != null) {
+            return this.right.preOrderSearch(id);
+        }
+
+        return result;
+    }
+
+    public Node infixOrderSearch(int id) {
+        Node result = null;
+
+        if (this.left != null) {
+            result = this.left.infixOrderSearch(id);
+        }
+        if (result != null) {
+            return result;
+        }
+
+        if (this.id == id) {
+            return this;
+        }
+
+        if (this.right != null) {
+            result = this.right.infixOrderSearch(id);
+        }
+
+        return result;
+    }
+
+    public Node postOrderSearch(int id) {
+        Node result = null;
+
+        if (this.left != null) {
+            result = this.left.postOrderSearch(id);
+        }
+        if (result != null) {
+            return result;
+        }
+
+        if (this.right != null) {
+            result = this.right.postOrderSearch(id);
+        }
+        if (result != null) {
+            return result;
+        }
+
+        if (this.id == id) {
+            return this;
+        }
+
+        return null;
     }
 }
