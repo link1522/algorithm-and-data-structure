@@ -25,18 +25,30 @@ public class BinaryTreeDemo {
         node3.setRight(node7);
         binaryTree.setRoot(node1);
 
+        /*
+         * 遍歷
+         */
         // binaryTree.preOrder();
         // binaryTree.infixOrder();
         // binaryTree.postOrder();
 
+        /*
+         * 查詢
+         */
         // Node n = binaryTree.preOrderSearch(7);
         // Node n = binaryTree.infixOrderSearch(7);
-        Node n = binaryTree.postOrderSearch(7);
-        if (n == null) {
-            System.out.println("找不到");
-        } else {
-            System.out.println(n);
-        }
+        // Node n = binaryTree.postOrderSearch(7);
+        // if (n == null) {
+        // System.out.println("找不到");
+        // } else {
+        // System.out.println(n);
+        // }
+
+        /*
+         * 刪除
+         */
+        binaryTree.delete(6);
+        binaryTree.preOrder();
     }
 }
 
@@ -81,6 +93,16 @@ class BinaryTree {
         if (root == null)
             return null;
         return root.postOrderSearch(id);
+    }
+
+    public void delete(int id) {
+        if (root == null)
+            return;
+        if (root.getId() == id) {
+            root = null;
+            return;
+        }
+        root.delete(id);
     }
 }
 
@@ -241,5 +263,26 @@ class Node {
         }
 
         return null;
+    }
+
+    /*
+     * 刪除
+     */
+    public void delete(int id) {
+        if (this.left != null) {
+            if (this.left.id == id) {
+                this.left = null;
+                return;
+            }
+            this.left.delete(id);
+        }
+
+        if (this.right != null) {
+            if (this.right.id == id) {
+                this.right = null;
+                return;
+            }
+            this.right.delete(id);
+        }
     }
 }
