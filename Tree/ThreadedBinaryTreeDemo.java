@@ -18,8 +18,9 @@ public class ThreadedBinaryTreeDemo {
         node3.setRight(node7);
         threadedBinaryTree.setRoot(node1);
         threadedBinaryTree.threadedNodes();
-        System.out.println("node 6 左節點為: " + node6.getLeft().getId());
-        System.out.println("node 6 右節點為: " + node6.getRight().getId());
+        // System.out.println("node 6 左節點為: " + node6.getLeft().getId());
+        // System.out.println("node 6 右節點為: " + node6.getRight().getId());
+        threadedBinaryTree.threadedList();
     }
 }
 
@@ -58,5 +59,24 @@ class ThreadedBinaryTree {
         pre = node;
 
         threadedNodes(node.getRight());
+    }
+
+    public void threadedList() {
+        if (root == null) return;
+        ThreadedNode node = root;
+
+        while (node != null) {
+            while (node.getLeftType() == 0) {
+                node = node.getLeft();
+            }
+
+            System.out.println(node);
+            while (node.getRightType() == 1) {
+                node = node.getRight();
+                System.out.println(node);
+            }
+
+            node = node.getRight();
+        }
     }
 }
