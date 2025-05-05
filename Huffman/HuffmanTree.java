@@ -7,25 +7,25 @@ import java.util.List;
 public class HuffmanTree {
     public static void main(String[] args) {
         int[] arr = { 13, 7, 8, 3, 29, 6, 1 };
-        Node huffmanTree = createHuffmanTree(arr);
+        Node1 huffmanTree = createHuffmanTree(arr);
         huffmanTree.preOrder();
     }
 
-    public static Node createHuffmanTree(int[] arr) {
-        List<Node> nodes = new ArrayList<Node>();
+    public static Node1 createHuffmanTree(int[] arr) {
+        List<Node1> nodes = new ArrayList<Node1>();
         for (int value : arr) {
-            nodes.add(new Node(value));
+            nodes.add(new Node1(value));
         }
 
         while (nodes.size() > 1) {
             Collections.sort(nodes);
 
             // 取出權值最小的節點
-            Node leftNode = nodes.get(0);
+            Node1 leftNode = nodes.get(0);
             // 取出權值第二小的節點
-            Node rightNode = nodes.get(1);
+            Node1 rightNode = nodes.get(1);
 
-            Node parent = new Node(leftNode.value + rightNode.value);
+            Node1 parent = new Node1(leftNode.value + rightNode.value);
             parent.left = leftNode;
             parent.right = rightNode;
 
@@ -41,12 +41,12 @@ public class HuffmanTree {
     }
 }
 
-class Node implements Comparable<Node> {
+class Node1 implements Comparable<Node1> {
     int value;
-    Node left;
-    Node right;
+    Node1 left;
+    Node1 right;
 
-    public Node(int value) {
+    public Node1(int value) {
         this.value = value;
     }
 
@@ -62,13 +62,13 @@ class Node implements Comparable<Node> {
 
     @Override
     public String toString() {
-        // return "Node {\n value = " + value + ",\n left = " + left + ",\n right = " +
+        // return "Node1 {\n value = " + value + ",\n left = " + left + ",\n right = " +
         // right + "\n}";
-        return "Node { value = " + value + " }";
+        return "Node1 { value = " + value + " }";
     }
 
     @Override
-    public int compareTo(Node node) {
+    public int compareTo(Node1 node) {
         return this.value - node.value;
     }
 }
