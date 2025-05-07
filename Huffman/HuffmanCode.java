@@ -10,14 +10,24 @@ import java.util.Map;
 public class HuffmanCode {
     public static void main(String[] args) {
         String content = "i like like like java do you like a java";
+        byte[] huffmanBytes = huffmanZip(content);
+    }
+
+    /**
+     * Huffman 編碼壓縮
+     */
+    private static byte[] huffmanZip(String content) {
         byte[] contentBytes = content.getBytes();
         List<Node> nodes = getNodes(contentBytes);
         Node huffmanTreeRoot = createHuffmanTree(nodes);
         Map<Byte, String> huffmanCodes = getCodes(huffmanTreeRoot);
-
-        System.out.println(huffmanCodes);
+        byte[] huffmanCodeBytes = zip(contentBytes, huffmanCodes);
+        return huffmanCodeBytes;
     }
 
+    /**
+     * 取得每個字符 Node 組成的 List
+     */
     private static List<Node> getNodes(byte[] bytes) {
         HashMap<Byte, Integer> map = new HashMap<>();
         for (byte b : bytes) {
@@ -37,6 +47,12 @@ public class HuffmanCode {
         return nodes;
     }
 
+    /**
+     * 創建 Huffman tree
+     * 
+     * @param nodes
+     * @return
+     */
     private static Node createHuffmanTree(List<Node> nodes) {
         if (nodes.size() == 0) {
             throw new InvalidParameterException("nodes 長度為空");
@@ -75,6 +91,12 @@ public class HuffmanCode {
         }
     }
 
+    /**
+     * 取得 Huffman codes (對照表)
+     * 
+     * @param node
+     * @return
+     */
     private static Map<Byte, String> getCodes(Node node) {
         if (node == null)
             return null;
@@ -83,6 +105,36 @@ public class HuffmanCode {
         getCodes(node.right, "1", stringBuilder);
 
         return huffmanCodes;
+    }
+
+    private static byte[] zip(byte[] bytes, Map<Byte, String> huffmanCodes) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b : bytes) {
+            stringBuilder.append(huffmanCodes.get(b));
+        }
+
+        int len;
+        // len = (stringBuilder.length() + 7) / 8; // 也可以這樣取代以下的 if...else
+        if (stringBuilder.length() % 8 == 0) {
+            len = stringBuilder.length() / 8;
+        } else {
+            len = stringBuilder.length() / 8 + 1;
+        }
+
+        byte[] huffmanCodeBytes = new byte[len];
+        int index = 0;
+        for (int i = 0; i < stringBuilder.length(); i += 8) {
+            String stringByte;
+            if (i + 8 > stringBuilder.length()) {
+                stringByte = stringBuilder.substring(i);
+            } else {
+                stringByte = stringBuilder.substring(i, i + 8);
+            }
+            huffmanCodeBytes[index] = (byte) Integer.parseInt(stringByte, 2);
+            index++;
+        }
+
+        return huffmanCodeBytes;
     }
 }
 
