@@ -11,6 +11,62 @@ public class HuffmanCode {
     public static void main(String[] args) {
         String content = "i like like like java do you like a java";
         byte[] huffmanBytes = huffmanZip(content);
+        byte[] decodedBytes = decode(huffmanCodes, huffmanBytes);
+        System.out.println(new String(decodedBytes));
+    }
+
+    private static byte[] decode(Map<Byte, String> huffmanCodes, byte[] huffmanBytes) {
+        var stringBuilder = new StringBuilder();
+        for (int i = 0; i < huffmanBytes.length; i++) {
+            boolean flag = !(i == huffmanBytes.length - 1);
+            String str = byteToBitString(flag, huffmanBytes[i]);
+            stringBuilder.append(str);
+        }
+
+        Map<String, Byte> map = new HashMap<>();
+        for (Map.Entry<Byte, String> entry : huffmanCodes.entrySet()) {
+            map.put(entry.getValue(), entry.getKey());
+        }
+
+        List<Byte> list = new ArrayList<>();
+        for (int i = 0; i < stringBuilder.length(); i++) {
+            int count = 1;
+
+            while (i + count < stringBuilder.length()) {
+                String str = stringBuilder.substring(i, i + count + 1);
+                if (map.containsKey(str)) {
+                    list.add(map.get(str));
+                    i += count;
+                    break;
+                }
+                count++;
+            }
+        }
+
+        byte[] bytes = new byte[list.size()];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = list.get(i);
+        }
+
+        return bytes;
+    }
+
+    /**
+     * 將 Byte 轉成二進制的字串(補碼)，ex: 8 => 1000
+     * flag 代表是否補零
+     * 在 huffman 最後一位可能沒有補滿 8 位，ex: 101，此時前面不用再補零
+     */
+    private static String byteToBitString(boolean flag, byte b) {
+        int temp = b; // 將 byte 轉乘 int
+        if (flag) {
+            temp |= 256; // 補高位(補零)， 1 0000 0000 | 0000 0001 => 1 0000 0001 才可以做 substring
+        }
+        String str = Integer.toBinaryString(temp); // 返回補碼
+
+        if (flag) {
+            return str.substring(str.length() - 8); // 只取最後 8 位 (1 Byte)
+        }
+        return str;
     }
 
     /**
