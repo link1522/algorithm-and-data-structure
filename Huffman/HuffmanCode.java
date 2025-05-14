@@ -2,6 +2,8 @@ package Huffman;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
@@ -13,13 +15,45 @@ import java.util.Map;
 
 public class HuffmanCode {
     public static void main(String[] args) {
+        /*
+         * 壓縮 & 解壓縮字串
+         */
         // String content = "i like like like java do you like a java";
         // byte[] contentBytes = content.getBytes();
         // byte[] huffmanBytes = huffmanZip(contentBytes);
         // byte[] decodedBytes = decode(huffmanCodes, huffmanBytes);
         // System.out.println(new String(decodedBytes));
 
-        zipFile("D:\\tmp\\600x400.jpg", "D:\\tmp\\600x400.cps");
+        /*
+         * 壓縮 & 解壓縮文件
+         */
+        // zipFile("D:\\tmp\\600x400.jpg", "D:\\tmp\\600x400.cps");
+        unzipFile("D:\\tmp\\600x400.cps", "D:\\tmp\\600x400_2.jpg");
+    }
+
+    public static void unzipFile(String zipFile, String dstFile) {
+        InputStream is = null;
+        ObjectInputStream ois = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(zipFile);
+            ois = new ObjectInputStream(is);
+            byte[] huffmanBytes = (byte[]) ois.readObject();
+            Map<Byte, String> huffmanCodes = (Map<Byte, String>) ois.readObject();
+            byte[] bytes = decode(huffmanCodes, huffmanBytes);
+            os = new FileOutputStream(dstFile);
+            os.write(bytes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                os.close();
+                ois.close();
+                is.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -30,13 +64,13 @@ public class HuffmanCode {
         OutputStream os = null;
         ObjectOutputStream oos = null;
         try {
-            is =  new FileInputStream(srcFile);
+            is = new FileInputStream(srcFile);
             byte[] b = new byte[is.available()];
             is.read(b);
             byte[] huffmanBytes = huffmanZip(b);
 
             os = new FileOutputStream(dstFile);
-            oos = new ObjectOutputStream(os);
+            oos = new ObjectOutputStream(os); // 使用對象流，以便後續讀出對象
             oos.writeObject(huffmanBytes); // 寫入壓縮後的資料
             oos.writeObject(huffmanCodes); // 寫入 huffman Codes，後續才可以解壓縮
         } catch (Exception exception) {
