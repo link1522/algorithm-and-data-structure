@@ -1,5 +1,9 @@
 package Huffman;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +13,48 @@ import java.util.Map;
 
 public class HuffmanCode {
     public static void main(String[] args) {
-        String content = "i like like like java do you like a java";
-        byte[] huffmanBytes = huffmanZip(content);
-        byte[] decodedBytes = decode(huffmanCodes, huffmanBytes);
-        System.out.println(new String(decodedBytes));
+        // String content = "i like like like java do you like a java";
+        // byte[] contentBytes = content.getBytes();
+        // byte[] huffmanBytes = huffmanZip(contentBytes);
+        // byte[] decodedBytes = decode(huffmanCodes, huffmanBytes);
+        // System.out.println(new String(decodedBytes));
+
+        zipFile("D:\\tmp\\600x400.jpg", "D:\\tmp\\600x400.cps");
     }
 
+    /**
+     * 壓縮文件
+     */
+    public static void zipFile(String srcFile, String dstFile) {
+        FileInputStream is = null;
+        OutputStream os = null;
+        ObjectOutputStream oos = null;
+        try {
+            is =  new FileInputStream(srcFile);
+            byte[] b = new byte[is.available()];
+            is.read(b);
+            byte[] huffmanBytes = huffmanZip(b);
+
+            os = new FileOutputStream(dstFile);
+            oos = new ObjectOutputStream(os);
+            oos.writeObject(huffmanBytes); // 寫入壓縮後的資料
+            oos.writeObject(huffmanCodes); // 寫入 huffman Codes，後續才可以解壓縮
+        } catch (Exception exception) {
+
+        } finally {
+            try {
+                oos.close();
+                os.close();
+                is.close();
+            } catch (Exception exception) {
+
+            }
+        }
+    }
+
+    /*
+     * 解壓縮
+     */
     private static byte[] decode(Map<Byte, String> huffmanCodes, byte[] huffmanBytes) {
         var stringBuilder = new StringBuilder();
         for (int i = 0; i < huffmanBytes.length; i++) {
@@ -72,8 +112,7 @@ public class HuffmanCode {
     /**
      * Huffman 編碼壓縮
      */
-    private static byte[] huffmanZip(String content) {
-        byte[] contentBytes = content.getBytes();
+    private static byte[] huffmanZip(byte[] contentBytes) {
         List<Node> nodes = getNodes(contentBytes);
         Node huffmanTreeRoot = createHuffmanTree(nodes);
         Map<Byte, String> huffmanCodes = getCodes(huffmanTreeRoot);
