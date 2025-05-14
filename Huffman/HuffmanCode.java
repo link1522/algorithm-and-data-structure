@@ -145,6 +145,10 @@ public class HuffmanCode {
 
     /**
      * Huffman 編碼壓縮
+     * 1. 透過資料的 byte[] 創建 nodes (node 中記錄 byte 與其出現次數)
+     * 2. 用 nodes 創建 Huffman tree
+     * 3. 從 Huffman tree 取 Huffman codes
+     * 4. 透過 Huffman codes 轉換原資料 (壓縮)
      */
     private static byte[] huffmanZip(byte[] contentBytes) {
         List<Node> nodes = getNodes(contentBytes);
