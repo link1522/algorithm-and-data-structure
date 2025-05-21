@@ -37,6 +37,36 @@ class Node {
         this.value = value;
     }
 
+    public Node search(int value) {
+        if (value == this.value) {
+            return this;
+        } else if (value < this.value) {
+            if (this.left == null) {
+                return null;
+            }
+            return this.left.search(value);
+        } else {
+            if (this.right == null) {
+                return null;
+            }
+            return this.right.search(value);
+        }
+    }
+
+    public Node searchParent(int value) {
+        if ((this.left != null && this.left.value == value) || (this.right != null && this.right.value == value)) {
+            return this;
+        } else {
+            if (value < this.value && this.left != null) {
+                return this.left.searchParent(value);
+            } else if (value >= this.value && this.right != null) {
+                return this.right.searchParent(value);
+            } else {
+                return null;
+            }
+        }
+    }
+
     // 遞迴加入，須滿足二叉排序樹
     public void add(Node node) {
         if (node == null)
