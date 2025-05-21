@@ -53,7 +53,7 @@ class BinarySearchTree {
             }
         } else if (target.left != null && target.right != null) {
             // 如果 target 有兩個子節點
-            // 找右子樹中的最小值放到 target
+            // 找右子樹中的最小值放到 target (也可以是左子樹找一個最大值)
             var minValue = deleteRightTreeMin(target.right);
             target.value = minValue;
         } else {
@@ -82,6 +82,21 @@ class BinarySearchTree {
         var target = node;
         while (target.left != null) {
             target = target.left;
+        }
+        deleteNode(target.value);
+
+        return target.value;
+    }
+
+    /**
+     * 
+     * @param node
+     * @return 以傳入的 node 節點為根找到的最大 value
+     */
+    public int deleteLeftTreeMax(Node node) {
+        var target = node;
+        while (target.right != null) {
+            target = target.right;
         }
         deleteNode(target.value);
 
