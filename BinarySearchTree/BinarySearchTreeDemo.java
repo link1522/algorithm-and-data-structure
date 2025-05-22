@@ -9,13 +9,24 @@ public class BinarySearchTreeDemo {
         }
         // binarySearchTree.infixOrder();
 
+        binarySearchTree.deleteNode(2);
+        binarySearchTree.deleteNode(5);
+        binarySearchTree.deleteNode(9);
+        binarySearchTree.deleteNode(12);
+        binarySearchTree.deleteNode(7);
+        binarySearchTree.deleteNode(3);
         binarySearchTree.deleteNode(10);
+        binarySearchTree.deleteNode(1);
         binarySearchTree.infixOrder();
     }
 }
 
 class BinarySearchTree {
     private Node root;
+
+    public Node getRoot() {
+        return root;
+    }
 
     public Node search(int value) {
         if (root == null)
@@ -63,6 +74,12 @@ class BinarySearchTree {
                 targetChild = target.left;
             } else {
                 targetChild = target.right;
+            }
+
+            // target 為 root 時 (parent 為 null)，直接將 root 指向 targetChild
+            if (parent == null) {
+                root = targetChild;
+                return;
             }
 
             if (parent.left == target) {
