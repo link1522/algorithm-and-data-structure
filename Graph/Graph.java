@@ -7,6 +7,7 @@ public class Graph {
     private ArrayList<String> vertexList;
     private int[][] edges;
     private int numOfEdges;
+    private boolean[] isVisited;
 
     public static void main(String[] args) {
         int n = 5;
@@ -22,12 +23,60 @@ public class Graph {
         graph.insertEdge(1, 4, 1);
 
         graph.showGraph();
+        graph.dfs();
     }
 
     public Graph(int n) {
         edges = new int[n][n];
         vertexList = new ArrayList<>(n);
         numOfEdges = 0;
+        isVisited = new boolean[n];
+    }
+
+    /**
+     * Depth-first search
+     */
+    private void dfs(int i) {
+        System.out.print(getValueByIndex(i) + " ");
+        isVisited[i] = true;
+        int w = getFirstNeighbor(i);
+        while (w != -1) {
+            if (!isVisited[w]) {
+                dfs(w);
+            }
+            w = getNextNeighbor(i, w);
+        }
+    }
+
+    /**
+     * 重載 dfs
+     */
+    public void dfs() {
+        int n = getNumOfVertex();
+        for (int i = 0; i < n; i++) {
+            if (isVisited[i]) {
+                continue;
+            }
+            dfs(i);
+        }
+    }
+
+    public int getFirstNeighbor(int index) {
+        for (int j = 0; j < vertexList.size(); j++) {
+            if (edges[index][j] > 0) {
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    public int getNextNeighbor(int v1, int v2) {
+        for (int j = v2 + 1; j < vertexList.size(); j++) {
+            if (edges[v1][j] > 0) {
+                return j;
+            }
+        }
+        return -1;
     }
 
     public int getNumOfVertex() {
