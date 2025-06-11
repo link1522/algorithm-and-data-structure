@@ -2,6 +2,7 @@ package Graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Graph {
     private ArrayList<String> vertexList;
@@ -23,14 +24,53 @@ public class Graph {
         graph.insertEdge(1, 4, 1);
 
         graph.showGraph();
+        System.out.println("DFS: ");
         graph.dfs();
+        System.out.println();
+        System.out.println("BFS: ");
+        graph.bfs();
     }
 
     public Graph(int n) {
         edges = new int[n][n];
         vertexList = new ArrayList<>(n);
         numOfEdges = 0;
-        isVisited = new boolean[n];
+    }
+
+    /**
+     * Breadth-first search
+     */
+    private void bfs(int i) {
+        int u; // 對列取出的節點
+        int w; // 鄰接節點索引
+        LinkedList<Integer> queue = new LinkedList<>();
+        System.out.print(getValueByIndex(i) + " ");
+        isVisited[i] = true;
+        queue.addLast(i);
+
+        while (!queue.isEmpty()) {
+            u = queue.removeFirst();
+            w = getFirstNeighbor(u);
+            while (w != -1) {
+                if (!isVisited[w]) {
+                    System.out.print(getValueByIndex(w) + " ");
+                    isVisited[w] = true;
+                    queue.addLast(w);
+                }
+                w = getNextNeighbor(u, w);
+            }
+        }
+    }
+
+    public void bfs() {
+        isVisited = new boolean[getNumOfVertex()];
+        int n = getNumOfVertex();
+        for (int i = 0; i < n; i++) {
+            if (isVisited[i]) {
+                continue;
+            }
+            bfs(i);
+        }
     }
 
     /**
@@ -52,6 +92,7 @@ public class Graph {
      * 重載 dfs
      */
     public void dfs() {
+        isVisited = new boolean[getNumOfVertex()];
         int n = getNumOfVertex();
         for (int i = 0; i < n; i++) {
             if (isVisited[i]) {
